@@ -44,6 +44,7 @@ The Main function:
         int mapsize,mapsizeafter;
         HashMap<String, Integer> map = new HashMap<String, Integer> ();
         // int q = 200;
+        Scanner sc = new Scanner(System.in);
         int q = nextInt();
         for(int i =1;i<q+1;i++) {
             // Create row
