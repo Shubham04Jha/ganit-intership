@@ -129,7 +129,7 @@ public class Ass4_2 {
     }
     private static Term termGen(String[] vars, int deg){
         Term t = new Term();
-        int a = randomNumGen(1,4); // this was the issue with the var not initialised problem there was 0 coming!
+        int a = randomNumGen(1,4);
 
         //Selecting the variables
         if (deg > 1) {
@@ -174,15 +174,17 @@ public class Ass4_2 {
         Term[] terms= new Term[randomNumGen(4,maxTerms)];
         int rIdxOfVariables = randomNumGen(0,variables.length-1);
         HashMap<Integer,Integer> coeffCheck = new HashMap<>();
+        HashMap<Integer,Integer> degCheck = new HashMap<>();
         for(int i =0;i<terms.length;i++){
             Term t = termGen(variables[rIdxOfVariables],otherThanThis(0,minDeg,maxDeg));
             terms[i]=t;
-            if((i==0&&t.coefficient<0)||coeffCheck.containsKey(t.coefficient)){
+            if((i==0&&t.coefficient<0)||coeffCheck.containsKey(t.coefficient)||degCheck.containsKey(t.deg)){
                 i--;
             }
             else{
                 p.remDeg.add(t.deg);// adding all the degree of the term
                 coeffCheck.put(t.coefficient, 0);
+                degCheck.put(t.deg,0);
                 p.coeffs.add(t.coefficient);
                 if (t.coefficient==max_coefficient+1||t.coefficient < p.ansTerm.coefficient) {
                     p.ansTerm = t;
@@ -209,18 +211,19 @@ public class Ass4_2 {
         StringBuilder st2 = new StringBuilder();
         if(p.ansTerm.var.size()==1){
             st.append("Here the power of variable $"+p.ansTerm.var.get(0)+"$ is $"+ p.ansTerm.powers.get(0)+
-                    "$ and thus the total power is $"+p.ansTerm.deg+"$"+", Thus the degree of term $"+p.ansTerm.fullterm+"$ is $"+p.ansTerm.deg+"$.");
+                    "$<br> $\\therefore$ power of $"+p.ansTerm.fullterm+"$ is $"+p.ansTerm.deg+"$.");
             st2.append(" या पदामध्ये $"+p.ansTerm.var.get(0)+"$ हे $"+p.ansTerm.var.size()+"$ चल आहेत" +
-                    " यात $"+p.ansTerm.var.get(0)+"$ या चलाचा घातांक $"+p.ansTerm.powers.get(0)+"$ आहे." +
-                    " त्यामुळे या पदाची कोटी $"+p.ansTerm.deg+"$ आहे. <br>  म्हणून सगळ्यात लहान सहगुणक असणाऱ्या पदाची कोटी $= "+p.ansTerm.deg+"$ आहे, हे उत्तर. <br>");
+                    " यात $"+p.ansTerm.var.get(0)+"$ या चलाचा घातांक $"+p.ansTerm.powers.get(0)+"$ आहे.<br>" +
+                    "$\\therefore "+p.ansTerm.fullterm+"$ या पदाची कोटी $"+p.ansTerm.deg+"$ आहे. <br>." +
+                    "$\\therefore$ सगळ्यात लहान सहगुणक असणार्या पदाची कोटी $= "+p.ansTerm.deg+"$ आहे, हे उत्तर.");
         }else if(p.ansTerm.var.size()==2){
             st.append("Here the power of variable $" + p.ansTerm.var.get(0) + "$ is $" + p.ansTerm.powers.get(0)+"$" +
                     " and that of variable $"+p.ansTerm.var.get(0)+"$ is $"+p.ansTerm.powers.get(0)+"$" +
-                    " and their total power is $"+halfequationOfPowers(p.ansTerm.powers)+" = "+p.ansTerm.deg+"$, "+
-                    "Thus the degree of term $"+p.ansTerm.fullterm+"$ is $"+p.ansTerm.deg+"$.");
+                    "<br> $\\therefore$ power of $"+p.ansTerm.fullterm+"$ is $"+halfequationOfPowers(p.ansTerm.powers)+" = "+p.ansTerm.deg+"$.");
             st2.append(" या पदामध्ये $"+p.ansTerm.var.get(0)+"$ आणि $"+p.ansTerm.var.get(1)+"$ असे "+p.ansTerm.var.size()+" चल आहेत" +
                     " यात $"+p.ansTerm.var.get(0)+"$ या चलाचा घातांक $"+p.ansTerm.powers.get(0)+"$ आहे तर $"+p.ansTerm.var.get(1)+"$ चा $"+p.ansTerm.powers.get(1)+"$ आहे." +
-                    " त्यामुळे या पदाची कोटी $"+halfequationOfPowers(p.ansTerm.powers)+" = "+p.ansTerm.deg+"$ आहे. <br>  म्हणून सगळ्यात लहान सहगुणक असणाऱ्या पदाची कोटी $= "+p.ansTerm.deg+"$ आहे, हे उत्तर. <br>");
+                    "<br> $\\therefore "+p.ansTerm.fullterm+"$ या पदाची कोटी $"+halfequationOfPowers(p.ansTerm.powers)+" = "+p.ansTerm.deg+"$ आहे. <br>"+
+                    "$\\therefore$ सगळ्यात लहान सहगुणक असणार्या पदाची कोटी $= "+p.ansTerm.deg+"$ आहे, हे उत्तर. <br>");
         }
         p.englishSolution = st.toString();
         p.marathiSolution = st2.toString();
@@ -298,14 +301,14 @@ public class Ass4_2 {
             //Generate Solution
             String Solu ="Ans : $"+p.ansTerm.deg+"$<br> " +
                     "Constant associated with the variable is called as coefficient of that term. Here smallest coefficient is $"+p.ansTerm.coefficient+
-                    "$ as $("+p.comparingEqn+")$ and is associated with term $"+p.ansTerm.fullterm+"$. Degree of the term is, sum of individual powers of all variables in the term. " +
+                    "$ as $("+p.comparingEqn+")$ and is associated with term $"+p.ansTerm.fullterm+"$.<br> Degree of the term is, sum of individual powers of all variables in the term. <br>" +
                     p.englishSolution+"<br>" +
-                    " Hence degree of the term with smallest coefficient is $"+p.ansTerm.deg+"$ is the answer.<br>";
+                    "$\\therefore$ degree of the term with smallest coefficient is $"+p.ansTerm.deg+"$ is the answer.<br>";
             String Uttar = "# उत्तर : $"+p.ansTerm.deg+"$ <br>" +
                     "चलासोबत असणारा स्थिरांक हा त्या चलाचा सहगुणक असतो. <br>पद जर एका चलातील असेल तर त्या चलाचा घातांक हाच त्या पदाची कोटी असते." +
                     " पद जर एकापेक्षा अधिक चलातील असेल तर सर्व चलांच्या घातांकांची बेरीज ही त्या पदाची कोटी असते.<br>" +
                     "दिलेल्या बहुपदीमध्ये $"+p.ansTerm.fullterm+"$ या पदाचा सहगुणक $"+p.ansTerm.coefficient+"$ हा सर्वात लहान आहे." +
-                    " कारण  $("+p.comparingEqn+")$." +
+                    " कारण  $("+p.comparingEqn+")$.<br>" +
                     p.marathiSolution;
             String Solution = " "+Solu+" "+Uttar+" ";
             row.createCell(16).setCellValue(Solution);
