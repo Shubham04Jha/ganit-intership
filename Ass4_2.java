@@ -206,6 +206,11 @@
 //                st.append("+");
 //            }
 //        }
+//        int constant = otherThanThis(0,min_coefficient,max_coefficient);
+//        if(randomNumGen(0,5)>0){
+//            if(constant>0) st.append("+");
+//             st.append(constant);
+//        }
 //        p.polynomial = st.toString();
 //        st = new StringBuilder();
 //        StringBuilder st2 = new StringBuilder();
@@ -215,7 +220,7 @@
 //            st2.append(" या पदामध्ये $"+p.ansTerm.var.get(0)+"$ हे $"+p.ansTerm.var.size()+"$ चल आहेत" +
 //                    " यात $"+p.ansTerm.var.get(0)+"$ या चलाचा घातांक $"+p.ansTerm.powers.get(0)+"$ आहे.<br>" +
 //                    "$\\therefore "+p.ansTerm.fullterm+"$ या पदाची कोटी $"+p.ansTerm.deg+"$ आहे. <br>." +
-//                    "$\\therefore$ सगळ्यात लहान सहगुणक असणार्या पदाची कोटी $= "+p.ansTerm.deg+"$ आहे, हे उत्तर.");
+//                    "$\\therefore$ सगळ्यात लहान सहगुणक असणार्\u200Dया पदाची कोटी $= "+p.ansTerm.deg+"$ आहे, हे उत्तर.");
 //        }else if(p.ansTerm.var.size()==2){
 //            st.append("Here the power of variable $" + p.ansTerm.var.get(0) + "$ is $" + p.ansTerm.powers.get(0)+"$" +
 //                    " and that of variable $"+p.ansTerm.var.get(0)+"$ is $"+p.ansTerm.powers.get(0)+"$" +
@@ -223,7 +228,7 @@
 //            st2.append(" या पदामध्ये $"+p.ansTerm.var.get(0)+"$ आणि $"+p.ansTerm.var.get(1)+"$ असे "+p.ansTerm.var.size()+" चल आहेत" +
 //                    " यात $"+p.ansTerm.var.get(0)+"$ या चलाचा घातांक $"+p.ansTerm.powers.get(0)+"$ आहे तर $"+p.ansTerm.var.get(1)+"$ चा $"+p.ansTerm.powers.get(1)+"$ आहे." +
 //                    "<br> $\\therefore "+p.ansTerm.fullterm+"$ या पदाची कोटी $"+halfequationOfPowers(p.ansTerm.powers)+" = "+p.ansTerm.deg+"$ आहे. <br>"+
-//                    "$\\therefore$ सगळ्यात लहान सहगुणक असणार्या पदाची कोटी $= "+p.ansTerm.deg+"$ आहे, हे उत्तर. <br>");
+//                    "$\\therefore$ सगळ्यात लहान सहगुणक असणार्\u200Dया पदाची  कोटी $= "+p.ansTerm.deg+"$ आहे, हे उत्तर. <br>");
 //        }
 //        p.englishSolution = st.toString();
 //        p.marathiSolution = st2.toString();
@@ -301,11 +306,11 @@
 //            //Generate Solution
 //            String Solu ="Ans : $"+p.ansTerm.deg+"$<br> " +
 //                    "Constant associated with the variable is called as coefficient of that term. Here smallest coefficient is $"+p.ansTerm.coefficient+
-//                    "$ as $("+p.comparingEqn+")$ and is associated with term $"+p.ansTerm.fullterm+"$.<br> Degree of the term is, sum of individual powers of all variables in the term. <br>" +
+//                    "$ as $("+p.comparingEqn+")$ and is associated with term $"+p.ansTerm.fullterm+"$.<br> Degree of the term is, sum of individual powers of all variables in the term. If a constant term is appearing without a variable, then it is not considered as a coefficient.<br>" +
 //                    p.englishSolution+"<br>" +
 //                    "$\\therefore$ degree of the term with smallest coefficient is $"+p.ansTerm.deg+"$ is the answer.<br>";
 //            String Uttar = "# उत्तर : $"+p.ansTerm.deg+"$ <br>" +
-//                    "चलासोबत असणारा स्थिरांक हा त्या चलाचा सहगुणक असतो. <br>पद जर एका चलातील असेल तर त्या चलाचा घातांक हाच त्या पदाची कोटी असते." +
+//                    "चला सोबत असणारा स्थिरांक हा त्या चलाचा सहगुणक असतो. पण जर नुसता स्थिरांक असेल तर, त्याच्या बरोबर चल नसल्याने त्याला सहगुणक म्हणता येत नाही.<br>पद जर एका चलातील असेल तर त्या चलाचा घातांक हाच त्या पदाची कोटी असते." +
 //                    " पद जर एकापेक्षा अधिक चलातील असेल तर सर्व चलांच्या घातांकांची बेरीज ही त्या पदाची कोटी असते.<br>" +
 //                    "दिलेल्या बहुपदीमध्ये $"+p.ansTerm.fullterm+"$ या पदाचा सहगुणक $"+p.ansTerm.coefficient+"$ हा सर्वात लहान आहे." +
 //                    " कारण  $("+p.comparingEqn+")$.<br>" +

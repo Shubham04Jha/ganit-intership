@@ -122,17 +122,17 @@
 //        private void makeSolution () {
 //                // note the term in the ans solution by vml is changed to polynomial and lastly i hv added the "which is the ans part"
 //                this.englishSolution = "Ans: $" + this.correctAnswer + "$<br>" +
-//                        "In index form, all terms in the polynomial are arranged in descending order, from highest to lowest index. " +
-//                        "If any power of $" + this.mt.var + "$ is missing, it is included in the polynomial with a coefficient of $0$. " +
+//                        "In index form, all terms in the polynomial are arranged in descending order, from highest to lowest index, followed by the constant at the end.<br>" +
+//                        "If any power of $" + this.mt.var + "$ is missing, it is included in the polynomial with a coefficient as $0$.<br>" +
 //                        "In this case, the term corresponding to $" + this.mt.vp + "$ is missing, so it is included in index form with a coefficient of $0$.<br>" +
-//                        "So, the index form of $" + this.str + "$ is $" + this.correctAnswer + "$, which is the answer.<br>";
+//                        "$\\therefore$ the index form of given polynomial is $" + this.correctAnswer + "$ is the answer.<br>";
 //                this.marathiSolution = "#उत्तर: $" + this.correctAnswer + "$<br>" +
 //                        "कोणतीही बहुपदी घातांक रूपात मांडताना चलाच्या सर्वात मोठ्या घातांकापासून सुरवात करून " +
-//                        "एक घातांकापर्यंतची सर्व पदे उतरत्या क्रमाने मांडतात आणि शेवटी स्थिरांक लिहतात. " +
+//                        "एक घातांका पर्यंतची सर्व पदे उतरत्या क्रमाने मांडतात आणि शेवटी स्थिरांक लिहतात.<br>" +
 //                        "जर एखाद्या घातांकाचे पद दिलेल्या बहुपदी मध्ये नसेल तर ते पद $0$ सहगुणकाच्या सहाय्याने दाखवतात.<br>" +
 //                        "दिलेल्या बहुपदीमध्ये चलाच्या $" + this.mt.vp + "$ या घातांकाचे पद नाही. " +
 //                        "त्यामुळे ते $0$ सहगुणकाच्या सहाय्याने लिहावे लागेल.<br>" +
-//                        "म्हणून दिलेल्या बहुपदीचे घातांक रूप $" + this.correctAnswer + "$ असे येईल, हे उत्तर.<br>";
+//                        "$\\therefore$ दिलेल्या बहुपदीचे घातांक रूप $" + this.correctAnswer + "$ असे येईल, हे उत्तर.<br>";
 //
 //            }
 //
@@ -197,7 +197,7 @@
 //        }
 //        int mapsize,mapsizeafter;
 //        HashMap<String, Integer> map = new HashMap<String, Integer> ();
-//        System.out.println("How many questions to be printed?");
+//        System.out.println("5th assign: How many questions to be printed?");
 //        Scanner sc = new Scanner(System.in);
 //        int q = sc.nextInt();
 //        for(int i =1;i<q+1;i++) {
