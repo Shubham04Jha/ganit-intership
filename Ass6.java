@@ -15,7 +15,7 @@ public class Ass6 {
     final static String topic_no = "030402",questiontype="Text";
 
     // Term class requires the Coefficient part, String var and int pwr part
-   public static class Term{
+    static class Term{
         // k = coefficient, pwr = power, vp = variable part
         Integer k;
         String vp ; // x^{pwr}
@@ -42,18 +42,19 @@ public class Ass6 {
     }
 
     // Polynomial constructor only requires the terms Arraylist !
-    public static class Polynomial{
+     static class Polynomial{
         String str;
         String indexForm;
         ArrayList<Term> terms;
-        ArrayList<Term> mts; // used in marathi soln and the Polynomial constructor to initialise
+        ArrayList<Term> mts =new ArrayList<>(); // used in marathi soln and the Polynomial constructor to initialise
         String englishSolution;
         String marathiSolution;
         String correctAnswer, wrongAnswer, wrongAnswer1, wrongAnswer2;
         Polynomial(ArrayList<Term> terms) {
             for(int i=0;i<terms.size();i++){   //finding the terms with 0 coefficient and adding in mts
                 if(terms.get(i).k==0){
-                    mts.add(terms.get(i));
+                    System.out.println("Location Polynomial constructor");
+                    this.mts.add(terms.get(i));
                 }
             }
             this.terms = terms;
@@ -207,7 +208,10 @@ public class Ass6 {
                 terms.add(new Term(otherThanThis(0,min_coefficient,max_coefficient),x,i));
             }
         }
-        for()
+        for(Term t : terms){
+            System.out.println(t.fullterm);
+        }
+        System.out.println("Returning terms");
         return terms;
     }
     private static Polynomial polyGen(){
