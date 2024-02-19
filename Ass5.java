@@ -174,7 +174,7 @@ public class Ass5 {
     }
 
     public static void main(String args[]) throws IOException,FileNotFoundException{
-        String filename = "E:/Java Internship/ExcelSheets/VESIT_030402_165_Assign5_Shubham.xlsx";     //Location where excel file is getting generated
+        String filename = "E:/Java Internship/ExcelSheets/VESIT_030402_"+variation_no+"_Assign5_Shubham.xlsx";     //Location where excel file is getting generated
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Instruction");      //Generating first sheet as Instruction
 
