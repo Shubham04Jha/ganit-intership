@@ -53,7 +53,6 @@ public class Ass6 {
         Polynomial(ArrayList<Term> terms) {
             for(int i=0;i<terms.size();i++){   //finding the terms with 0 coefficient and adding in mts
                 if(terms.get(i).k==0){
-                    System.out.println("Location Polynomial constructor");
                     this.mts.add(terms.get(i));
                 }
             }
@@ -136,17 +135,17 @@ public class Ass6 {
             this.englishSolution = "Ans: $"+correctAnswer+"$<br>" +
                     "For coefficient form, initially, given polynomial is rewritten in standard form. " +
                     "If any term is missing, it is added with $0$ coefficient to get its index form, " +
-                    "and then only coefficients are written in order from highest power to lowest power. " +
-                    "Since the given polynomial is not in index form, we will write its index form as $"+indexForm+"$, " +
+                    "and then, only coefficients are written in order, from highest power to lowest power.<br>" +
+                    "Since the given polynomial is not in index form, we will write its index form as $"+indexForm+"$,<br>" +
                     "and then its Coefficient form as $"+correctAnswer+"$.<br>";
 
             this.marathiSolution = "# उत्तर : $"+correctAnswer+"$<br>" +
                     "सहगुणक रुपातील बहुपदीसाठी प्रथम दिलेली बहुपदी चलाच्या घातांकाच्या उतरत्या क्रमाने प्रमाण रुपात मांडतात. " +
                     "एखाद्या घातांकाचे पद जर बहुपदीत नसेल तर त्याचा सहगुणक $0$ मानून ती बहुपदी घातांक रुपात मांडतात. " +
-                    "आणि मग ती बहुपदी घातांकांच्या उतरत्या क्रमाने फक्त पदांच्या सहगुणकांच्या सहाय्याने लिहितात.<br>" +
-                    "दिलेल्या बहुपदीमध्ये"+makeSolutionAssistant(mts,"marathi")+" त्यामुळे ती $0$ सहगुणकाच्या सहाय्याने लिहावी लागतील. " +
-                    "त्यामुळे दिलेल्या बहुपदीचे घातांक रूप $"+indexForm+"$ असे होईल. " +
-                    "म्हणून  तीचे सहगुणक रुप $"+correctAnswer+"$ असे मिळते हे उत्तर.<br> ";
+                    "या नंतर त्या  बहुपदी मधील, घातांकांच्या उतरत्या क्रमाने, पदांचे फक्त सहगुणक लिहितात. यालाच सहगुणक रूप असे म्हणतात.<br>" +
+                    "दिलेल्या बहुपदीमध्ये"+makeSolutionAssistant(mts,"marathi") +
+                    "म्हणून दिलेल्या बहुपदीचे घातांक रूप $"+indexForm+"$ असे होईल.<br> " +
+                    "आणि त्यानुसार या बहुपदीचे सहगुणक रुप $"+correctAnswer+"$ असे मिळते हे उत्तर.<br> ";
 
         }
         private String makeSolutionAssistant(ArrayList<Term> mts,String lang){
@@ -158,9 +157,9 @@ public class Ass6 {
                     else if(i!=mts.size()-1) st.append(",");
                 }
                 if(mts.size()==1){
-                    st.append(" या घातांकातला पद नाही");
+                    st.append(" या घातांकाचे पद नाही त्यामुळे या पदासाठी $0$ सहगुणक घेऊन ते पद  लिहावे लागेल.<br>");
                 }else {
-                    st.append(" या घातांकाची पदे नाहीत");
+                    st.append(" या घातांकाची पदे नाहीत त्यामुळे या पदांसाठी $0$ सहगुणक घेऊन ते पदे लिहावे लागेल.<br>");
                 }
 
             }else{
@@ -208,10 +207,6 @@ public class Ass6 {
                 terms.add(new Term(otherThanThis(0,min_coefficient,max_coefficient),x,i));
             }
         }
-        for(Term t : terms){
-            System.out.println(t.fullterm);
-        }
-        System.out.println("Returning terms");
         return terms;
     }
     private static Polynomial polyGen(){
