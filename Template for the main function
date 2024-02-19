@@ -1,4 +1,6 @@
 Some imports and installations:
+// use this outside anyclass
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
