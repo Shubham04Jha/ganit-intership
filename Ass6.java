@@ -197,7 +197,7 @@ public class Ass6 {
         int number_of_missing_terms = randomNumGen(min_missing_term,max_missing_term);
         Set<Integer> mt = new HashSet<>();
         while(mt.size()!=number_of_missing_terms){
-            mt.add(randomNumGen(1,degPolynomial));
+            mt.add(randomNumGen(1,degPolynomial-1));
         }
         for(int i= degPolynomial;i>=0;i--){
             if(mt.contains(i)){
