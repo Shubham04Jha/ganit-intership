@@ -1,231 +1,214 @@
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.Scanner;
-
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-public class Main {
-    static String[] variables = {"a", "b", "c", "d", "f", "g", "h", "m", "n", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
-    private static int randomNumGen(int min, int max){
-        Random random = new Random();
-        return random.nextInt(max - min+1)+min;
-    }
-    public static String termGen(int deg, ArrayList<Integer> arr){
-        StringBuilder term = new StringBuilder("$");
-        int numberOfVariables = randomNumGen(1,3);
-        int remDeg = deg;
-        int varIdx = randomNumGen(0,variables.length-4);
-        term.append(randomNumGen(2,9));
-        for(int i=1;i<=numberOfVariables;i++){
-            term.append(variables[varIdx++]);
-            term.append("^{");
-            int tempDeg = remDeg;
-            if(i == numberOfVariables){
-                if(remDeg>1) term.append(remDeg);
-                arr.add(tempDeg);
-                term.append("}");
-            }
-            else if(i==numberOfVariables-1){
-                tempDeg = randomNumGen(1,remDeg-1);
-                if(tempDeg>1) term.append(tempDeg);
-                arr.add(tempDeg);
-                term.append("}");
-            }
-            else if(i==numberOfVariables-2){
-                tempDeg = randomNumGen(1,remDeg-2);
-                if(tempDeg>1) term.append(tempDeg);
-                arr.add(tempDeg);
-                term.append("}");
-            }
-            remDeg-=tempDeg;
-        }
-        if(remDeg!=0) System.out.println("Wrong term generated");
-        term.append("$");
-        return term.toString();
-    }
-    public static StringBuilder bracGen(ArrayList<Integer> soln ){
-        if(soln.size()==1){
-            return new StringBuilder("$"+soln.get(0)+"$");
-        }
-        int sum=0;
-        StringBuilder str = new StringBuilder("$(");
-        for(int t = 0;t<soln.size();t++){
-            str.append(soln.get(t));
-            sum+=soln.get(t);
-            if(t!=soln.size()-1){
-                str.append(" + ");
-            }
-        }
-        str.append(") = "+sum+"$");
-        return str;
-    }
-
-    public static void main(String args[]) throws IOException,FileNotFoundException{
-        String filename = "E:/Java Internship/ExcelSheets/VESIT_030402_145_Assign1_Shubham.xlsx";     //Location where excel file is getting generated
-        XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet = workbook.createSheet("Instruction");      //Generating first sheet as Instruction
-
-        XSSFSheet sheet1 = workbook.createSheet("Questions");       //Generating second sheet as Questions
-
-        //Adding first row in second sheet(Questions)
-        String[] header = {"Sr. No","Question Type","Answer Type","Topic Number","Question (Text Only)","Correct Answer 1","Correct Answer 2",
-                "Correct Answer 3","Correct Answer 4","Wrong Answer 1","Wrong Answer 2","Wrong Answer 3","Time in seconds","Difficulty Level",
-                "Question (Image/ Audio/ Video)","Contributor's Registered mailId","Solution (Text Only)","Solution (Image/ Audio/ Video)","Variation Number"};
-        XSSFRow rowhead = sheet1.createRow((short)0);
-
-        //Set height and width to the column and row
-        sheet1.setColumnWidth(4, 35*250);
-        sheet1.setColumnWidth(16, 45*250);
-
-        //Adding header to the second sheet
-        for(int head=0; head<header.length; head++) {
-            rowhead.createCell(head).setCellValue(header[head]);
-
-        }
-
-        //Taking input for number of question you want to generate
-        System.out.println("How many question you want to enter:-");
-        Scanner sc=new Scanner(System.in);
-        int mapsize,mapsizeafter;
-        HashMap<String, Integer> map = new HashMap<String, Integer> ();
-        int q = 200;
-        for(int i =1;i<q+1;i++) {
-            // Create row
-            XSSFRow row = sheet1.createRow(i);
-            row.createCell(0).setCellValue(i);  // sr no
-            row.createCell(1).setCellValue("Text"); // q type
-            row.createCell(2).setCellValue(1);   // ans type singlular in this case
-            row.createCell(3).setCellValue("030402"); //topic number
-
-            // Generate random terms to perform the operation
-            ArrayList<Integer> soln1= new ArrayList<>();
-            ArrayList<Integer> soln2= new ArrayList<>(); // solution assistant will be used in generating answer
-            int numberOfTerms = randomNumGen(5,6);
-            String[] termArr = new String[8]; // array to store the terms
-            HashMap<Integer, Integer> termTracker = new HashMap<>(); // map to store the deg of polynomial generated
-            int corDeg = randomNumGen(3,25); // degree for correct ans
-//            HashMap<String,Integer> mp = new HashMap<>(); // a small map to ensure that term1 and term 2 are different
-            String term = termGen(corDeg,soln1); // calling the termGen and getting the solution assistant initialised
-//            mp.put(term,0);
-            termArr[0]=term; // adding first term to the array
-            while(true){
-                soln2= new ArrayList<>();
-                String str = termGen(corDeg,soln2);
-                if(!str.equals(term)){
-                    termArr[1]=str; // adding second term to array
-                    break;
-                }
-            }
-            termTracker.put(corDeg,0);
-            for(int j1 = 2;j1<termArr.length;j1++){ // generating other terms with different degrees
-                int deg = randomNumGen(3,25);
-                if(termTracker.containsKey(deg)){
-                    j1--; // ensuring no duplicate deg term
-                }else{
-                    termTracker.put(deg,0);
-                    termArr[j1]= termGen(deg,new ArrayList<>()); // we wont need it so just passing a new one without using it anywhere below
-                }
-            } // adding other terms
-
-            // generating the correct option ! easy just access the 1st 2 elements of the termArr:
-            // the terms are in the format of $__$ now for option 1 we need a str = $____$ , $____$
-            String Correct_ans = termArr[0]+" and "+termArr[1]+"<br>";
-
-            // generating wrong options
-            // !!! since the terms were created randomly in the first place associating any thing except the combination of correctOpt will suffice
-            String wrong_ans = termArr[2]+" and "+termArr[3]+"<br>";
-            String wrong_ans1 = termArr[4]+" and "+termArr[5]+"<br>";
-            String wrong_ans2 = termArr[6]+" and "+termArr[7]+"<br>";
-
-            // for the placement of terms in the question we need to rearrange the terms.
-            StringBuilder questionpart2 = new StringBuilder();
-            HashMap<Integer,Integer> indx = new HashMap<>(); // hashmap to mark the array jotted in the questionpart2 string
-            for(int j3 = 0;j3<termArr.length;j3++){
-                questionpart2.append(termArr[j3]);
-                if(j3!=termArr.length-1)  questionpart2.append(" , ");
-
-            }
-            questionpart2.append(".");
-//            random placement
-//            questionpart2.append(".");
-//            StringBuilder questionpart2 = new StringBuilder();
-//            HashMap<Integer,Integer> indx = new HashMap<>(); // hashmap to mark the array jotted in the questionpart2 string
-//            for(int j3 = 0;j3<termArr.length;j3++){
-//                int idx = randomNumGen(0,termArr.length-1); // -1 to prevent ind outta bound
-//                if(indx.containsKey(idx)){
-//                    j3--;
-//                }else{
-//                    indx.put(idx,0);
-//                    questionpart2.append(termArr[idx]);
-//                    if(j3!=termArr.length-1)  questionpart2.append(" , "); // no commas at last position
+//import java.util.*;
+//
+//public class Main {
+//    static int variation_no = 142,difficulty_level = 2, time_alloted = 60, anstype =1,maxTerms =6,min_coefficient=-12,max_coefficient=12;
+//    static int minDeg = 1,maxDeg = 5;
+//    static String topic_no = "030402",questiontype="Text";
+//    static String[][] variables = {{"a", "b"}, {"p", "q"}, {"x", "y"}, {"l", "m"}, {"u", "v"}, {"r", "s"}, {"b", "c"}, {"f", "g"}};
+//    static int[][] pwrCombination = {
+//            {0, 1}, {0, 2}, {0, 3}, {0, 4}, {0, 5},
+//            {1, 0}, {1, 1}, {1, 2}, {1, 3}, {1, 4},
+//            {2, 0}, {2, 1}, {2, 2}, {2, 3},
+//            {3, 0}, {3, 1}, {3, 2},
+//            {4, 0}, {4, 1},
+//            {5, 0}
+//    };
+//
+//    static class Term{
+//        String fullterm;
+//        int deg=0;
+//        int coefficient;
+//        int[] powers ;
+//        String[] var  ;
+//        Term(String[] var,int coeff,int[] pwrs){
+//            coefficient = coeff;
+//            powers=pwrs;
+//            this.var = var;
+//            StringBuilder fulltermBuilder = new StringBuilder();
+//
+//            // Appending the coeff
+//            if (coefficient != 1) {
+//                fulltermBuilder.append(coefficient);
+//            }
+//            // Append variables and powers if the power is not 0
+//
+//            for (int i = 0; i < var.length; i++) {
+//                if(pwrs[i]==0) continue;
+//                deg+=pwrs[i];
+//                fulltermBuilder.append(var[i]);
+//                // Encapsulate powers with {} only when the power is not 1!
+//                if(pwrs[i]!=1)
+//                    fulltermBuilder.append("^{").append(powers[i]).append("}");
+//            }
+//            // Set the fullterm
+//            fullterm = fulltermBuilder.toString();
+//        }
+//        @Override
+//        public String toString() {
+//            return fullterm;
+//        }
+//    }
+//    public static int[] genCoeff(int n, int startRange, int endRange) {
+//        if (n > (endRange - startRange + 1)) {
+//            throw new IllegalArgumentException("Cannot generate more unique integers than the available range");
+//        }
+//
+//        int[] resultArray = new int[n];
+//        Set<Integer> uniqueNumbers = new HashSet<>();
+//
+//        do {
+//            while (uniqueNumbers.size() < n) {
+//                int randomNumber = randomNumGen(startRange, endRange);
+//                uniqueNumbers.add(randomNumber);
+//            }
+//
+//            int index = 0;
+//            for (int number : uniqueNumbers) {
+//                resultArray[index++] = number;
+//            }
+//
+//            Arrays.sort(resultArray);
+//        }while(resultArray[0]==0);
+//
+//        return resultArray;
+//    }
+//    private static int randomNumGen(int min, int max){
+//        Random random = new Random();
+//        return random.nextInt(max - min+1)+min;
+//    }
+//    static int otherThanThis(int n,int min, int max){
+//        int n2;
+//        do{
+//            n2 = randomNumGen(min,max);
+//        }while(n==n2);
+//        return n2;
+//    }
+//
+//    static class Polynomial_4_2{
+//        String comparingEquation;
+//        public  void makeComparingEquation(int[] arr){
+//            StringBuilder st = new StringBuilder();
+//            st.append("(").append(arr[0]);
+//            for(int i=1;i<arr.length;i++){
+//                st.append("<");
+//                st.append(arr[i]);
+//            }
+//            st.append(")");
+//            comparingEquation = st.toString();
+//        }
+//        String polynomial;
+//        String correctAnswer,wrongAnswer,wrongAnswer1,wrongAnswer2,wrongAnswer3;
+//        public void makeWrongOptions(int ca){
+//            wrongAnswer = Integer.toString((ca+1)%maxDeg);
+//            wrongAnswer1 = Integer.toString((ca+2)%maxDeg);
+//            wrongAnswer2 = Integer.toString((ca+3)%maxDeg);
+//        }
+//
+//        Term ansTerm;
+//
+//        Polynomial_4_2(){
+//            String[] var = variables[randomNumGen(0, variables.length - 1)];
+//            int[] uniqueIntArray = genCoeff(maxTerms, min_coefficient, max_coefficient);
+//            makeComparingEquation(uniqueIntArray);
+//            HashSet<Integer> hashPwr = new HashSet<>();
+//            ArrayList<Term> list = new ArrayList<>();
+//            int idx = randomNumGen(0,pwrCombination.length-1);
+//            hashPwr.add(idx);
+//            ansTerm = new Term(var,uniqueIntArray[0],pwrCombination[idx]);
+//            list.add(ansTerm);
+//            boolean flag =true;
+//            for(int i=1;i<=5;i++){
+//                idx = randomNumGen(0,pwrCombination.length-1);
+//                if(hashPwr.contains(idx)){
+//                    i--;
+//                    continue;
+//                }
+//                if(flag&&randomNumGen(1,5)<=3){
+//                    flag =false;
+//                    list.add(new Term(var,otherThanThis(0,-9,9), new int[]{0, 0}));
+//                }
+//                Term t = new Term(var,uniqueIntArray[i],pwrCombination[idx]);
+//                list.add(t);
+//                hashPwr.add(idx);
+//            }
+//            //shuffling
+//            Collections.shuffle(list);
+//            StringBuilder st = new StringBuilder();
+//            st.append(list.get(0));
+//            for(int i=1;i<list.size();i++){
+//                if(list.get(i).coefficient==0) continue;
+//                if(list.get(i).coefficient>0){
+//                    st.append("+");
+//                }
+//                st.append(list.get(i));
+//            }
+//            polynomial = st.toString();
+//            correctAnswer = Integer.toString(ansTerm.deg);
+//            makeWrongOptions(ansTerm.deg);
+//            wrongAnswer3 = ansTerm.fullterm;
+//            makeSolution();
+//        }
+//        String solution;
+//        public void makeSolution(){
+//            int count=0;
+//            ArrayList<String> var = new ArrayList<>();
+//            ArrayList<Integer> powers = new ArrayList<>();
+//            for(int i=0;i<2;i++){
+//                if(ansTerm.powers[i]>0) {
+//                    count++;
+//                    var.add(ansTerm.var[i]);
+//                    powers.add(ansTerm.powers[i]);
 //                }
 //            }
-//            questionpart2.append(".");
-
-            //Generate question english
-            String  Que = "Which two of the following terms are with identical degree? <br>";
-            //Generate question marathi
-            String Que1 = "#खाली दिलेल्या पैकी कोणत्या दोन पदांची कोटी समान आहे ?<br>";
-            String Question = ""+Que+" "+Que1+"";
-
-            row.createCell(4).setCellValue(Question);
-            row.createCell(5).setCellValue(Correct_ans);
-//				 row.createCell(6).setCellValue(" ");
-//				 row.createCell(7).setCellValue(" ");
-//				 row.createCell(8).setCellValue(" ");
-            row.createCell(9).setCellValue(wrong_ans);
-            row.createCell(10).setCellValue(wrong_ans1);
-            row.createCell(11).setCellValue(wrong_ans2);
-            row.createCell(12).setCellValue(60); // timealloted
-            row.createCell(13).setCellValue(3);  // difficulty level
-//				  row.createCell(14).setCellValue(" ");
-            row.createCell(15).setCellValue("2022.shubham.jha@ves.ac.in");
-
-            StringBuilder brac1 = bracGen(soln1);
-            StringBuilder brac2 = bracGen(soln2);
-            //Generate Solution
-            String Solu ="Ans : "+ termArr[0]+" and "+termArr[1]+" By definition degree of a term is the power of the variable, if it is in one variable. But if the term contains more than one variable, then the power of the term is sum of the individual exponents (power) of all the variables in that term.<br>From the given terms, only pair of terms with same degree is "
-                    +termArr[0]+" and "+termArr[1]+"<br>As degree of "+termArr[0]+" is "+brac1+" and that of "+termArr[1]+" is "+brac2+", and thus, is same for both terms. <br>"+
-                    "Hence "+termArr[0]+" and  "+termArr[1]+" are the two terms with identical degree, is the answer.<br>";
-            String Sol1 = "#उत्तर : "+termArr[0]+" and "+termArr[1]+"<br>पद जर एका चलातील असेल तर त्या चलाचा घातांक हाच त्या पदाची कोटी असते. पद जर एकापेक्षा अधिक चलातील असेल तर सर्व चलांच्या घातांकांची बेरीज ही त्या पदाची कोटी असते.<br> "
-                    +"दिलेल्या पदांच्या जोडीमधील "+termArr[0]+" आणि "+termArr[1]+" या जोडीच्या पदांची कोटी समान आहे.<br>"+termArr[0]+" या पदाची कोटी $=$ "+brac1+" आणि  "+termArr[1]+" या पदाची कोटी "+brac2+".<br>"+
-                    "म्हणून सारखी कोटी असलेली "+termArr[0]+" आणि  "+termArr[1]+" ही दोन पदे आहेत, हे उत्तर. <br>";
-            String Solution = " "+Solu+" "+Sol1+" ";
-            row.createCell(16).setCellValue(Solution);
-//				  row.createCell(17).setCellValue(" ");
-            row.createCell(18).setCellValue(145);
-
-            mapsize = map.size();
-            map.put(questionpart2.toString(), i);
-            mapsizeafter = map.size();
-
-            //In Java, a map can consist of virtually any number of key-value pairs, but the keys must always be unique — non-repeating.
-            if(mapsize == mapsizeafter) {
-                System.out.println("duplicate Question"+i+". " + Question);
-                i--;
-            }
-
-        }
-
-
-        int rowTotal = sheet1.getLastRowNum();
-//			  System.out.println(rowTotal);
-        XSSFRow row = sheet1.createRow((short)rowTotal+1);
-        row.createCell(0).setCellValue("****");
-
-        //Writing data to the file
-        FileOutputStream fileout = new FileOutputStream(filename);
-        workbook.write(fileout);
-        fileout.close();
-
-        System.out.println("file created");
-
-    }
-
-}
+//
+//            StringBuilder st = new StringBuilder();
+//            StringBuilder st2 = new StringBuilder();
+//            if(count ==1){
+//                st.append("Here the power of variable $"+var.get(0)+"$ is $"+ powers.get(0)+
+//                        "$<br> $\\therefore$ power of $"+ansTerm.fullterm+"$ is $"+ansTerm.deg+"$.");
+//                st2.append(" या पदामध्ये $"+var.get(0)+"$ हे $"+1+"$ चल आहेत" +
+//                        " यात $"+var.get(0)+"$ या चलाचा घातांक $"+powers.get(0)+"$ आहे.<br>" +
+//                        "$\\therefore "+ansTerm.fullterm+"$ या पदाची कोटी $"+ansTerm.deg+"$ आहे. <br>." +
+//                        "$\\therefore$ सगळ्यात लहान सहगुणक असणार्\u200Dया पदाची कोटी $= "+ansTerm.deg+"$ आहे, हे उत्तर.");
+//            }else if(count ==2){
+//                st.append("Here the power of variable $" + ansTerm.var[0] + "$ is $" + ansTerm.powers[0]+"$" +
+//                        " and that of variable $"+ansTerm.var[1]+"$ is $"+ansTerm.powers[1]+"$" +
+//                        "<br> $\\therefore$ power of $"+ansTerm.fullterm+"$ is $"+ansTerm.powers[0]+ansTerm.powers[1]+" = "+ansTerm.deg+"$.");
+//                st2.append(" या पदामध्ये $"+ansTerm.var[0]+"$ आणि $"+ansTerm.var[1]+"$ असे "+2+" चल आहेत" +
+//                        " यात $"+ansTerm.var[0]+"$ या चलाचा घातांक $"+ansTerm.powers[0]+"$ आहे तर $"+ansTerm.var[1]+"$ चा $"+ansTerm.powers[1]+"$ आहे." +
+//                        "<br> $\\therefore "+ansTerm.fullterm+"$ या पदाची कोटी $"+ansTerm.powers[0]+ansTerm.powers[1]+" = "+ansTerm.deg+"$ आहे. <br>"+
+//                        "$\\therefore$ सगळ्यात लहान सहगुणक असणार्\u200Dया पदाची  कोटी $= "+ansTerm.deg+"$ आहे, हे उत्तर. <br>");
+//            }else if(count >2||count<1) {
+//                throw new IllegalArgumentException("This was only made for max 2 variables ");
+//            }
+//            String Solu ="Ans : $"+ansTerm.deg+"$<br> " +
+//                    "Constant associated with the variable is called as coefficient of that term. Here smallest coefficient is $"+ansTerm.coefficient+
+//                    "$ as $"+comparingEquation+"$ and is associated with term $"+ansTerm.fullterm+"$.<br> Degree of the term is, sum of individual powers of all variables in the term. If a constant term is appearing without a variable, then it is not considered as a coefficient.<br>"
+//                    + st+"<br>" +
+//                    "$\\therefore$ degree of the term with smallest coefficient is $"+ansTerm.deg+"$ is the answer.<br>";
+//            String Uttar = "# उत्तर : $"+ansTerm.deg+"$ <br>" +
+//                    "चला सोबत असणारा स्थिरांक हा त्या चलाचा सहगुणक असतो. पण जर नुसता स्थिरांक असेल तर, त्याच्या बरोबर चल नसल्याने त्याला सहगुणक म्हणता येत नाही.<br>पद जर एका चलातील असेल तर त्या चलाचा घातांक हाच त्या पदाची कोटी असते." +
+//                    " पद जर एकापेक्षा अधिक चलातील असेल तर सर्व चलांच्या घातांकांची बेरीज ही त्या पदाची कोटी असते.<br>" +
+//                    "दिलेल्या बहुपदीमध्ये $"+ansTerm.fullterm+"$ या पदाचा सहगुणक $"+ansTerm.coefficient+"$ हा सर्वात लहान आहे." +
+//                    " कारण  $"+comparingEquation+"$.<br>" +
+//                    st2;
+//            solution = Solu+Uttar;
+//        }
+//    }
+//    public static void main(String[] args) {
+//        Polynomial_4_2 polynomial_4_2 = new Polynomial_4_2();
+//
+//        // Accessing and printing all the fields in Polynomial_4_2
+//        System.out.println("Polynomial: $" + polynomial_4_2.polynomial+"$<br>");
+//        System.out.println("Correct Answer: $" + polynomial_4_2.correctAnswer+"$<br>");
+//        System.out.println("Wrong Answer : $" + polynomial_4_2.wrongAnswer+"$<br>");
+//        System.out.println("Wrong Answer 1: $" + polynomial_4_2.wrongAnswer1+"$<br>");
+//        System.out.println("Wrong Answer 2: $" + polynomial_4_2.wrongAnswer2+"$<br>");
+//        System.out.println("Wrong Answer 3: $" + polynomial_4_2.wrongAnswer3+"$<br>");
+//        System.out.println("Solution: " + polynomial_4_2.solution);
+//        System.out.println("AnsTerm: $" + polynomial_4_2.ansTerm+"$<br>");
+//    }
+//
+//
+//
+//}

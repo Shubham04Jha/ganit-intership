@@ -210,7 +210,7 @@
 //            // generating wrong options, i am using the smallest coefficient for the wrong ans 1
 //            String wrong_ans = (p.ansTerm.deg!=p.ansTerm.coefficient?p.ansTerm.coefficient:p.ansTerm.coefficient+1)+"<br>";//say if wrong_ans and wrong_ans 1 both are same to Correct_ans hence precaustion is taken
 //            // will be using any other terms' degree for this wrong ans
-//             String wrong_ans1 = "Hell";
+//             String wrong_ans1 ;
 //             if(p.ansTerm.powers.size()!=0)
 //                 wrong_ans1=(p.ansTerm.powers.get(0))+"<br>"; // but what if both wrongans1 and wrong ans 2 are same? henc the sub power of the term
 //            else System.out.println(i+"th question Polynomial is: +"+p.polynomial);
