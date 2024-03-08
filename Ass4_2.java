@@ -36,8 +36,11 @@ public class Ass4_2 {
             StringBuilder fulltermBuilder = new StringBuilder();
 
             // Appending the coeff
-            if (coefficient != 1) {
+            if (coefficient != 1&&coefficient!=-1) {
                 fulltermBuilder.append(coefficient);
+            }
+            if(coefficient==-1){
+                fulltermBuilder.append("-");
             }
             // Append variables and powers if the power is not 0
 
@@ -63,9 +66,9 @@ public class Ass4_2 {
         }
 
         int[] resultArray = new int[n];
-        Set<Integer> uniqueNumbers = new HashSet<>();
 
         do {
+            Set<Integer> uniqueNumbers = new HashSet<>();
             while (uniqueNumbers.size() < n) {
                 int randomNumber = randomNumGen(startRange, endRange);
                 uniqueNumbers.add(randomNumber);
@@ -134,13 +137,13 @@ public class Ass4_2 {
                 }
                 if(flag&&randomNumGen(1,5)<=3){
                     flag =false;
-                    list.add(new Term(var,otherThanThis(0,-9,9), new int[]{0, 0}));
+                    list.add(new Term(var,otherThanThis(0,min_coefficient,max_coefficient), new int[]{0, 0}));
                 }
                 Term t = new Term(var,uniqueIntArray[i],pwrCombination[idx]);
                 list.add(t);
                 hashPwr.add(idx);
             }
-            //shuffling
+            //shuffling and making the actual polynomial
             Collections.shuffle(list);
             StringBuilder st = new StringBuilder();
             st.append(list.get(0));
@@ -271,12 +274,14 @@ public class Ass4_2 {
                 i--;
             }
             System.out.println("-------------------------------------------------------------------------------------------");
+            System.out.println("Polynomial is : "+p.polynomial);
             System.out.println("Question no: "+i);
             System.out.println("Question: "+Question);
             System.out.println("correct answer: "+correct_ans);
             System.out.println("wrong 1: "+wrong_ans);
             System.out.println("wrong 2: "+wrong_ans1);
             System.out.println("wrong 3: "+wrong_ans2);
+            System.out.println("wrong 4: "+wrong_ans3);
             System.out.println("Solution: "+p.solution);
             System.out.println("-------------------------------------------------------------------------------------------");
 
