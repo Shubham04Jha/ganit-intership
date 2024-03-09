@@ -27,8 +27,8 @@ public class Ass6 {
             this.var = x;
             this.pwr = pwr;
             this.vp = makeVp(x,pwr);
-            this.fullterm =  (k!=1&&k!=-1)?k+this.vp:(k==-1?"-"+this.vp:(pwr==0?k+this.vp:this.vp)) ; // if k!= 1 we take the full term and if k is 1 we check if its the constant term or the variable term if constant we append the k and if not we append just the variable part
-
+//            this.fullterm =  (k!=1&&k!=-1)?k+this.vp:(k==-1?"-"+this.vp:(pwr==0?k+this.vp:this.vp)) ; // if k!= 1 we take the full term and if k is 1 we check if its the constant term or the variable term if constant we append the k and if not we append just the variable part
+            this.fullterm =  (pwr==0)?k+this.vp:(k!=1&&k!=-1?k+this.vp:(k==-1?"-"+this.vp:this.vp)) ;
         }
         private static String makeVp(String x, int pwr){
             if(pwr == 0) return "";
@@ -50,7 +50,7 @@ public class Ass6 {
         String englishSolution;
         String marathiSolution;
         String correctAnswer, wrongAnswer, wrongAnswer1, wrongAnswer2;
-        Polynomial(ArrayList<Term> terms) {
+        Polynomial(ArrayList<Term> terms) { // the terms received are sorted
             for(int i=0;i<terms.size();i++){   //finding the terms with 0 coefficient and adding in mts
                 if(terms.get(i).k==0){
                     this.mts.add(terms.get(i));
@@ -165,17 +165,17 @@ public class Ass6 {
                 }
 
             }else{
-                StringBuilder st2 = new StringBuilder();
+//                StringBuilder st2 = new StringBuilder();
                 for(int i=0;i<mts.size();i++){
                     st.append(" $").append(mts.get(i).vp).append("$");
-                    st2.append(" $").append(mts.get(i).vp).append("$");
+//                    st2.append(" $").append(mts.get(i).vp).append("$");
                     if(i==mts.size()-2) {
                         st.append(" and  ");
-                        st2.append(" and  ");
+//                        st2.append(" and  ");
                     }
                     else if(i!=mts.size()-1) {
                         st.append(",");
-                        st2.append(",");
+//                        st2.append(",");
                     }
                 }
                 if(mts.size()==1){
