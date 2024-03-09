@@ -27,7 +27,7 @@ public class Ass6 {
             this.var = x;
             this.pwr = pwr;
             this.vp = makeVp(x,pwr);
-            this.fullterm =  (k!=1)?k+this.vp:(pwr==0?k+this.vp:this.vp) ; // if k!= 1 we take the full term and if k is 1 we check if its the constant term or the variable term if constant we append the k and if not we append just the variable part
+            this.fullterm =  (k!=1&&k!=-1)?k+this.vp:(k==-1?"-"+this.vp:(pwr==0?k+this.vp:this.vp)) ; // if k!= 1 we take the full term and if k is 1 we check if its the constant term or the variable term if constant we append the k and if not we append just the variable part
 
         }
         private static String makeVp(String x, int pwr){
@@ -115,14 +115,14 @@ public class Ass6 {
             return st.toString();
         }
 
-        // function below is checked made use of collections to write better code
+
         private String makeUnorderedPoly(ArrayList<Term> terms){
             ArrayList<Term> tempTerms = new ArrayList<>(terms);
             tempTerms.removeIf(obj->obj.k==0);
             Collections.shuffle(tempTerms);
             StringBuilder st = new StringBuilder();
             for(Term t : tempTerms){
-                if(st.length()>1&&t.k>0){
+                if(st.length()>0&&t.k>0){
                     st.append("+");
                 }
                 st.append(t.fullterm);
@@ -136,8 +136,10 @@ public class Ass6 {
                     "For coefficient form, initially, given polynomial is rewritten in standard form. " +
                     "If any term is missing, it is added with $0$ coefficient to get its index form, " +
                     "and then, only coefficients are written in order, from highest power to lowest power.<br>" +
-                    "Since the given polynomial is not in index form, we will write its index form as $"+indexForm+"$,<br>" +
-                    "and then its Coefficient form as $"+correctAnswer+"$.<br>";
+                    "Since the given polynomial is not in index form, we will write its index form. " +
+                    "Also, the term corresponding to"+makeSolutionAssistant(mts,"english")+" to get the index form, as $"+indexForm+"$,<br>" +
+                    "Now, taking its coefficients, we will get the coefficient " +
+                    "form as $"+correctAnswer+"$.<br>";
 
             this.marathiSolution = "# उत्तर : $"+correctAnswer+"$<br>" +
                     "सहगुणक रुपातील बहुपदीसाठी प्रथम दिलेली बहुपदी चलाच्या घातांकाच्या उतरत्या क्रमाने प्रमाण रुपात मांडतात. " +
@@ -163,15 +165,23 @@ public class Ass6 {
                 }
 
             }else{
+                StringBuilder st2 = new StringBuilder();
                 for(int i=0;i<mts.size();i++){
                     st.append(" $").append(mts.get(i).vp).append("$");
-                    if(i==mts.size()-2) st.append(" and  ");
-                    else if(i!=mts.size()-1) st.append(",");
+                    st2.append(" $").append(mts.get(i).vp).append("$");
+                    if(i==mts.size()-2) {
+                        st.append(" and  ");
+                        st2.append(" and  ");
+                    }
+                    else if(i!=mts.size()-1) {
+                        st.append(",");
+                        st2.append(",");
+                    }
                 }
                 if(mts.size()==1){
-                    st.append(" is missing");
+                    st.append(" is missing, we will add that term corresponding to"+st+" with coefficient as $0$");
                 }else {
-                    st.append(" are missing");
+                    st.append(" are missing, we will add these terms corresponding to"+st+" with coefficient as $0$");
                 }
             }
             return st.toString();
@@ -290,6 +300,8 @@ public class Ass6 {
             System.out.println(wrong_ans1);
             System.out.println(wrong_ans2);
             System.out.println(Solution);
+            System.out.println(p.str);
+            System.out.println(p.indexForm);
             System.out.println("End of Solution");
         }
 
