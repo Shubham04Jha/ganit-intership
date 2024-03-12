@@ -34,16 +34,20 @@ public class Ass4_2 {
             powers=pwrs;
             this.var = var;
             StringBuilder fulltermBuilder = new StringBuilder();
-
+            // theres also a special case when coefficient is -1 the deg is 0 i.e the constant term! so what we do is if thats the case we make the full term -1
             // Appending the coeff
             if (coefficient != 1&&coefficient!=-1) {
                 fulltermBuilder.append(coefficient);
             }
-            if(coefficient==-1){
-                fulltermBuilder.append("-");
+            else if(coefficient==-1&&pwrs[0]==0&&pwrs[1]==0){
+                if(pwrs[0]==0&&pwrs[1]==0){
+                    fulltermBuilder.append("-1");
+                }
+                else{
+                    fulltermBuilder.append("-");
+                }
             }
             // Append variables and powers if the power is not 0
-
             for (int i = 0; i < var.length; i++) {
                 if(pwrs[i]==0) continue;
                 deg+=pwrs[i];
@@ -70,7 +74,7 @@ public class Ass4_2 {
         do {
             Set<Integer> uniqueNumbers = new HashSet<>();
             while (uniqueNumbers.size() < n) {
-                int randomNumber = randomNumGen(startRange, endRange);
+                int randomNumber = otherThanThis(0,startRange, endRange);
                 uniqueNumbers.add(randomNumber);
             }
 
@@ -83,7 +87,7 @@ public class Ass4_2 {
         }while(resultArray[0]==0);
 
         return resultArray;
-    }
+    } //ensured that this will not give 0 as the first coefficient and since no two numbers will be repeated then not even 0 will be repeated
     private static int randomNumGen(int min, int max){
         Random random = new Random();
         return random.nextInt(max - min+1)+min;
@@ -135,21 +139,21 @@ public class Ass4_2 {
                     i--;
                     continue;
                 }
-                if(flag&&randomNumGen(1,5)<=3){
+                if(flag&&randomNumGen(1,5)<4){
                     flag =false;
                     list.add(new Term(var,otherThanThis(0,min_coefficient,max_coefficient), new int[]{0, 0}));
                 }
-                Term t = new Term(var,uniqueIntArray[i],pwrCombination[idx]);
+                Term t = new Term(var,uniqueIntArray[i],pwrCombination[idx]); // this can have coefficient 0 too
                 list.add(t);
                 hashPwr.add(idx);
             }
             //shuffling and making the actual polynomial
             Collections.shuffle(list);
             StringBuilder st = new StringBuilder();
-            st.append(list.get(0));
-            for(int i=1;i<list.size();i++){
+            //st.append(list.get(0)); // here ! here i have to check whether the added term is 0 or not!
+            for(int i=0;i<list.size();i++){
                 if(list.get(i).coefficient==0) continue;
-                if(list.get(i).coefficient>0){
+                if(!st.isEmpty() && list.get(i).coefficient>0){
                     st.append("+");
                 }
                 st.append(list.get(i));
@@ -284,7 +288,6 @@ public class Ass4_2 {
             System.out.println("wrong 4: "+wrong_ans3);
             System.out.println("Solution: "+p.solution);
             System.out.println("-------------------------------------------------------------------------------------------");
-
         }
         int rowTotal = sheet1.getLastRowNum();
 //			  System.out.println(rowTotal);
@@ -297,6 +300,7 @@ public class Ass4_2 {
         fileout.close();
 
         System.out.println("file created");
+
 
     }
 
